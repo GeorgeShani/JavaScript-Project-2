@@ -206,7 +206,6 @@ async function searchAndDisplayEvent(inputID) {
     }
 
     // Search API 
-    // const _searchAPI = `https://gateway.tkt.ge/v2/shows/search?keyword=${searchValue}&api_key=7d8d34d1-e9af-4897-9f0f-5c36c179be77`;
     const _searchAPI = `https://gateway.tkt.ge/search?query=${searchValue}`;
 
     const searchData = await fetchData(_searchAPI);
