@@ -227,8 +227,8 @@ async function searchAndDisplayEvent(inputID) {
         return;
     }
 
-    searchData.data.forEach((show) => {
-        let dateString = `${show.eventDate}`;
+    searchData.data.forEach((event) => {
+        let dateString = `${event.eventDate}`;
         let eventDate = new Date(dateString);
 
         let day = eventDate.getDate();
@@ -242,11 +242,11 @@ async function searchAndDisplayEvent(inputID) {
         mainContainer.innerHTML += `
             <div class="search-result-card">
                 <div class="search-result-image-container">
-                    <img src="https://static.tkt.ge/img/${show.horizontalFileName}">
+                    <img src="https://static.tkt.ge/img/${event.horizontalFileName}">
                 </div>
                 <div class="search-result-info-container">
-                    <p class="search-result-title">${show.showTitle}</p>
-                    <p class="search-result-address">${show.venue}</p>
+                    <p class="search-result-title">${event.eventTitle}</p>
+                    <p class="search-result-address">${event.venue}</p>
                     <p class="search-result-time">${formattedDate}</p>
                 </div>
             </div>
