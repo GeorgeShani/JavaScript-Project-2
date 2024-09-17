@@ -206,7 +206,8 @@ async function searchAndDisplayEvent(inputID) {
     }
 
     // Search API 
-    const _searchAPI = `https://gateway.tkt.ge/v2/shows/search?keyword=${searchValue}&api_key=7d8d34d1-e9af-4897-9f0f-5c36c179be77`;
+    // const _searchAPI = `https://gateway.tkt.ge/v2/shows/search?keyword=${searchValue}&api_key=7d8d34d1-e9af-4897-9f0f-5c36c179be77`;
+    const _searchAPI = `https://gateway.tkt.ge/search?query=${searchValue}`;
 
     const searchData = await fetchData(_searchAPI);
     
@@ -222,43 +223,32 @@ async function searchAndDisplayEvent(inputID) {
     mainContainer.style["justify-content"] = "center";
     mainContainer.style["gap"] = "28px";
 
-    if (searchData.Data.Items.length === 0) {
+    if (searchData.data.length === 0) {
         mainContainer.innerHTML = "<h2>No such events found :(</h2>";
         return;
     }
 
-    searchData.Data.Items.forEach((show) => {
-        let dateString = `${show.EventDateString}`;
-        let formattedDateString = "";
+    searchData.data.forEach((show) => {
+        let dateString = `${show.eventDate}`;
+        let eventDate = new Date(dateString);
 
-        if (dateString.trim() !== "") {
-            let parts = dateString.split("-");
-            let datePart = parts[0].split("/");
-            let timePart = parts[1].split(":");
+        let day = eventDate.getDate();
+        let month = geoMonths[eventDate.getMonth()];
+        let year = eventDate.getFullYear();
+        let hours = eventDate.getHours();
+        let minutes = eventDate.getMinutes();
 
-            let formattedDate = new Date(datePart[2], datePart[1] - 1, datePart[0], timePart[0], timePart[1]);
-
-            let day = formattedDate.getDate();
-            let month = geoMonths[formattedDate.getMonth()];
-            let year = formattedDate.getFullYear();
-            let hours = formattedDate.getHours();
-            let minutes = formattedDate.getMinutes();
-
-            formattedDateString = `${day} ${month} ${year}, ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-        } else {
-            formattedDateString = "";
-        }
+        let formattedDate = `${day} ${month} ${year}, ${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
         mainContainer.innerHTML += `
             <div class="search-result-card">
                 <div class="search-result-image-container">
-                    <img src="${show.Poster}">
+                    <img src="https://static.tkt.ge/img/${show.horizontalFileName}">
                 </div>
                 <div class="search-result-info-container">
-                    <p class="search-result-title">${show.ShowName}</p>
-                    <p class="search-result-category">${show.CategoryName}</p>
-                    <p class="search-result-address">${show.VenueName}</p>
-                    <p class="search-result-time">${formattedDateString}</p>
+                    <p class="search-result-title">${show.showTitle}</p>
+                    <p class="search-result-address">${show.venue}</p>
+                    <p class="search-result-time">${formattedDate}</p>
                 </div>
             </div>
         `;
